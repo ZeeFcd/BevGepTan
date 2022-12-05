@@ -7,9 +7,10 @@ from PIL import Image
 acc = Image.open("correctness.png")
 loss = Image.open("loss.png")
 report = pd.read_csv('report.csv', index_col=0)
+
 evaluation = pd.read_csv('eval.csv')
-test_loss = evaluation[0]
-test_acc = evaluation[1]
+evaluation = evaluation.columns.tolist()
+
 
 col1, col2 = st.columns((1, 1))
 
@@ -21,9 +22,9 @@ with col2:
 col4, col5 = st.columns((1, 1))
 
 with col4:
-    st.metric('Test Accuracy', test_acc)
+    st.metric('Test Accuracy', evaluation[1])
 with col5:
-    st.metric('Test loss', test_loss)
+    st.metric('Test loss', evaluation[0])
 
 st.table(data=report)
 

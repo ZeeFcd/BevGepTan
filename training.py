@@ -24,12 +24,12 @@ train_im, valid_im, train_lab, valid_lab = train_test_split(X_train, train_lab_c
                                                             random_state=40, shuffle=True)
 
 model = Sequential()
-model.add(Conv2D(32, (3, 3), input_shape=(150, 150, 3), activation='relu'))
+model.add(Conv2D(16, (3, 3), input_shape=(150, 150, 3), activation='relu'))
 model.add(MaxPooling2D(2, 2))
-model.add(Conv2D(32, (3, 3), activation='relu'))
+model.add(Conv2D(16, (3, 3), activation='relu'))
 model.add(MaxPooling2D(2, 2))
 model.add(Flatten())
-model.add(Dense(units=128, activation='relu'))
+model.add(Dense(units=64, activation='relu'))
 model.add(Dense(units=3, activation='softmax'))
 
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
@@ -80,9 +80,10 @@ print(dat)
 dat.to_csv('report.csv')
 
 print('--------------------')
-test_eval_df = pd.DataFrame(test_eval)
-print(test_eval_df)
-test_eval_df.to_csv('eval.csv')
+print(test_eval)
+with open('eval.csv', 'w') as f:
+    f.write(f"{test_eval[0]}, {test_eval[1]}")
+
 
 
 
