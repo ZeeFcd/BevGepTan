@@ -22,9 +22,9 @@ with col2:
 col4, col5 = st.columns((1, 1))
 
 with col4:
-    st.metric('Test Accuracy', evaluation[1])
+    st.metric('Test Accuracy', f'{round(evaluation[1], 4) * 100}%')
 with col5:
-    st.metric('Test loss', evaluation[0])
+    st.metric('Test loss', f'{round(evaluation[0], 4) * 100}%')
 
 st.table(data=report)
 

@@ -24,18 +24,18 @@ train_im, valid_im, train_lab, valid_lab = train_test_split(X_train, train_lab_c
                                                             random_state=40, shuffle=True)
 
 model = Sequential()
-model.add(Conv2D(16, (3, 3), input_shape=(150, 150, 3), activation='relu'))
+model.add(Conv2D(8, (3, 3), input_shape=(150, 150, 3), activation='relu'))
 model.add(MaxPooling2D(2, 2))
-model.add(Conv2D(16, (3, 3), activation='relu'))
+model.add(Conv2D(8, (3, 3), activation='relu'))
 model.add(MaxPooling2D(2, 2))
 model.add(Flatten())
-model.add(Dense(units=64, activation='relu'))
+model.add(Dense(units=32, activation='relu'))
 model.add(Dense(units=3, activation='softmax'))
 
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 model.summary()
 
-train_dropout = model.fit(train_im, train_lab, batch_size=32,epochs=5,verbose=1,validation_data=(valid_im, valid_lab))
+train_dropout = model.fit(train_im, train_lab, batch_size=32, epochs=4, verbose=1, validation_data=(valid_im, valid_lab))
 
 test_eval = model.evaluate(X_test, test_lab_categorical, verbose=1)
 
