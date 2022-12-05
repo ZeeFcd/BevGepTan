@@ -10,8 +10,8 @@ report = pd.read_csv('report.csv', index_col=0)
 
 evaluation = pd.read_csv('eval.csv')
 evaluation = evaluation.columns.tolist()
-test_acc = round(int(evaluation[1]), 4) * 100
-test_lost = round(int(evaluation[0]), 4) * 100
+test_acc = round(float(evaluation[1]), 4) * 100
+test_lost = round(float(evaluation[0]), 4) * 100
 
 col1, col2 = st.columns((1, 1))
 
