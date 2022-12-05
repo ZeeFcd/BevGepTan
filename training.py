@@ -37,9 +37,17 @@ model.summary()
 
 train_dropout = model.fit(train_im, train_lab, batch_size=32,epochs=5,verbose=1,validation_data=(valid_im, valid_lab))
 
-model.save("model_saved.h5")
-converter = tf.lite.TFLiteConverter.from_keras_model_file("model_saved.h5")
-converter.optimizations = []
+
+
+
+
+# Convert the model.
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+# Save the model.
+with open('model.tflite', 'wb') as f:
+  f.write(tflite_model)
 
 print()
 
