@@ -3,10 +3,8 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from keras.models import Sequential, Model
-from keras.layers import Input
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import BatchNormalization
 from keras.layers import ELU, PReLU, LeakyReLU
 from fileread import input_target_split
 from sklearn.model_selection import train_test_split
@@ -50,6 +48,7 @@ val_accuracy = train_dropout.history['val_accuracy']
 loss = train_dropout.history['loss']
 val_loss = train_dropout.history['val_loss']
 epochs = range(len(accuracy))
+
 plt.figure()
 plt.plot(epochs, accuracy, 'bo', label='Training accuracy')
 plt.plot(epochs, val_accuracy, 'b', label='Validation accuracy')
@@ -72,18 +71,18 @@ print("Found correct labels:", len(correct))
 incorrect = np.where(predicted_classes != y_test)[0]
 print("Found incorrect labels:", len(incorrect))
 
+print('--------------------')
 report = classification_report(y_test, predicted_classes, target_names=labels, output_dict=True)
-print(report)
-
 dat = pd.DataFrame.from_dict(report)
 dat = dat.drop('support', axis=0)
 dat = dat.drop(['accuracy', 'macro avg', 'weighted avg'], axis=1)
 print(dat)
 dat.to_csv('report.csv')
 
+print('--------------------')
 test_eval_df = pd.DataFrame(test_eval)
 print(test_eval_df)
-dat.to_csv('eval.csv')
+test_eval_df.to_csv('eval.csv')
 
 
 

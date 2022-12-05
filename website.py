@@ -8,6 +8,8 @@ acc = Image.open("correctness.png")
 loss = Image.open("loss.png")
 report = pd.read_csv('report.csv', index_col=0)
 evaluation = pd.read_csv('eval.csv')
+test_loss = evaluation[0]
+test_acc = evaluation[1]
 
 col1, col2 = st.columns((1, 1))
 
@@ -18,10 +20,10 @@ with col2:
 
 col4, col5 = st.columns((1, 1))
 
-#with col4:
-#    st.metric('Test Accuracy', value, delta=None, delta_color="normal", help=None)
-#with col5:
-#   st.metric('Test loss', value, delta=None, delta_color="normal", help=None)
+with col4:
+    st.metric('Test Accuracy', test_acc)
+with col5:
+    st.metric('Test loss', test_loss)
 
 st.table(data=report)
 
