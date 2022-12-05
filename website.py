@@ -16,18 +16,17 @@ test_lost = round(float(evaluation[0]), 4) * 100
 col1, col2 = st.columns((1, 1))
 
 with col1:
-    st.image(acc, clamp=True)
+    col4, col5 = st.columns((1, 1))
+    with col4:
+        st.image(acc, clamp=True)
+
+    with col5:
+        st.image(loss, clamp=True)
+    st.table(data=report)
+
 with col2:
-    st.image(loss, clamp=True)
-
-col4, col5 = st.columns((1, 1))
-
-
-with col4:
     st.metric('Test Accuracy', f'{test_acc}%')
-with col5:
     st.metric('Test loss', f'{test_lost}%')
 
-st.table(data=report)
 
 
