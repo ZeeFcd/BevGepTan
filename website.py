@@ -8,7 +8,7 @@ report = pd.read_csv('report.csv')
 
 st.image(acc, clamp=True)
 st.image(loss, clamp=True)
-st.dataframe(data=report)
+st.table(data=report)
 
 
 
