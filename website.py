@@ -13,7 +13,7 @@ evaluation = evaluation.columns.tolist()
 test_acc = round(float(evaluation[1]), 4) * 100
 test_lost = round(float(evaluation[0]), 4) * 100
 
-col1, col2, col3 = st.columns((1, 1, 1))
+col1, col2, col3 = st.columns((1, 1, 1), gap="medium")
 
 with col1:
     st.image(acc, clamp=True)
