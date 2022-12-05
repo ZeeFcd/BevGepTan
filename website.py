@@ -10,7 +10,8 @@ report = pd.read_csv('report.csv', index_col=0)
 
 evaluation = pd.read_csv('eval.csv')
 evaluation = evaluation.columns.tolist()
-
+test_acc = round(evaluation[1], 4) * 100
+test_lost = round(evaluation[0], 4) * 100
 
 col1, col2 = st.columns((1, 1))
 
@@ -21,10 +22,11 @@ with col2:
 
 col4, col5 = st.columns((1, 1))
 
+
 with col4:
-    st.metric('Test Accuracy', f'{round(evaluation[1], 4) * 100}%')
+    st.metric('Test Accuracy', f'{test_acc}%')
 with col5:
-    st.metric('Test loss', f'{round(evaluation[0], 4) * 100}%')
+    st.metric('Test loss', f'{test_lost}%')
 
 st.table(data=report)
 
