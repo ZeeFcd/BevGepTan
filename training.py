@@ -82,7 +82,7 @@ dat.to_csv('report.csv')
 print('--------------------')
 print(test_eval)
 with open('eval.csv', 'w') as f:
-    f.write(f"{test_eval[0]}, {test_eval[1]}")
+    f.write(f"{test_eval[0]},{test_eval[1]}")
 
 
 
