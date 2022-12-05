@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from keras.models import Sequential, Model
 from keras.layers import Input
 from keras.layers import Dense, Dropout, Flatten
@@ -29,7 +30,7 @@ model.add(MaxPooling2D(2, 2))
 model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(2, 2))
 model.add(Flatten())
-model.add(Dense(units=512, activation='relu'))
+model.add(Dense(units=256, activation='relu'))
 model.add(Dense(units=3, activation='softmax'))
 
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
@@ -37,17 +38,41 @@ model.summary()
 
 train_dropout = model.fit(train_im, train_lab, batch_size=32,epochs=5,verbose=1,validation_data=(valid_im, valid_lab))
 
+test_eval = model.evaluate(X_test, test_lab_categorical, verbose=1)
+
+print('Test loss:', test_eval[0])
+print('Test accuracy:', test_eval[1])
 
 
+accuracy = train_dropout.history['accuracy']
+val_accuracy = train_dropout.history['val_accuracy']
+loss = train_dropout.history['loss']
+val_loss = train_dropout.history['val_loss']
+epochs = range(len(accuracy))
+plt.figure()
+plt.plot(epochs, accuracy, 'bo', label='Training accuracy')
+plt.plot(epochs, val_accuracy, 'b', label='Validation accuracy')
+plt.title('Training and validation accuracy')
+plt.legend()
+plt.savefig("correctness.png", transparent=True)
 
+plt.figure()
+plt.plot(epochs, loss, 'bo', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Validation loss')
+plt.title('Training and validation loss')
+plt.legend()
+plt.savefig("loss.png", transparent=True)
 
-# Convert the model.
-converter = tf.lite.TFLiteConverter.from_keras_model(model)
-tflite_model = converter.convert()
+predicted_classes = model.predict(X_test)
+predicted_classes = np.argmax(np.round(predicted_classes), axis=1)
+correct = np.where(predicted_classes == y_test)[0]
+print("Found correct labels:", len(correct))
 
-# Save the model.
-with open('model.tflite', 'wb') as f:
-  f.write(tflite_model)
+incorrect = np.where(predicted_classes != y_test)[0]
+print("Found incorrect labels:", len(incorrect))
+
+print(classification_report(y_test, predicted_classes, target_names=labels))
+
 
 print()
 
