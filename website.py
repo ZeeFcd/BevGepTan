@@ -13,14 +13,13 @@ evaluation = evaluation.columns.tolist()
 test_acc = round(float(evaluation[1]), 4) * 100
 test_lost = round(float(evaluation[0]), 4) * 100
 
-col1, col2, col3 = st.columns((1, 1, 1), gap="medium")
+col1, col2 = st.columns((1, 1), gap="medium")
 
 with col1:
     st.image(acc, clamp=True)
 with col2:
     st.image(loss, clamp=True)
-with col3:
-    st.metric('Test Accuracy', f'{test_acc}%')
-    st.metric('Test loss', f'{test_lost}%')
 
 st.table(data=report)
+st.metric('Test Accuracy', f'{test_acc}%')
+st.metric('Test loss', f'{test_lost}%')
