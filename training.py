@@ -31,7 +31,7 @@ model.add(MaxPooling2D(2, 2))
 model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(2, 2))
 model.add(Flatten())
-model.add(Dense(units=256, activation='relu'))
+model.add(Dense(units=128, activation='relu'))
 model.add(Dense(units=3, activation='softmax'))
 
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
@@ -74,10 +74,16 @@ print("Found incorrect labels:", len(incorrect))
 
 report = classification_report(y_test, predicted_classes, target_names=labels, output_dict=True)
 print(report)
+
 dat = pd.DataFrame.from_dict(report)
+dat = dat.drop('support', axis=0)
+dat = dat.drop(['accuracy', 'macro avg', 'weighted avg'], axis=1)
 print(dat)
 dat.to_csv('report.csv')
 
+test_eval_df = pd.DataFrame(test_eval)
+print(test_eval_df)
+dat.to_csv('eval.csv')
 
 
 
