@@ -72,7 +72,11 @@ print("Found correct labels:", len(correct))
 incorrect = np.where(predicted_classes != y_test)[0]
 print("Found incorrect labels:", len(incorrect))
 
-print(classification_report(y_test, predicted_classes, target_names=labels))
+report = classification_report(y_test, predicted_classes, target_names=labels, output_dict=True)
+print(report)
+dat = pd.DataFrame.from_dict(report)
+print(dat)
+dat.to_csv('report.csv')
 
 
 
