@@ -36,6 +36,7 @@ if img_file_buffer is not None:
 
     img = cv2.resize(img, (150, 150))
     img = img / 255.0
+    img = np.float32(img)
     st.image(img)
 
     interpreter = tflite.Interpreter(model_path='model.tflite') #allocate the tensors
