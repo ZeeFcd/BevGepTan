@@ -1,10 +1,17 @@
 import numpy as np
+import tensorflow as tf
 from keras.utils import load_img, img_to_array
 import random
 import os
 
 
 def input_target_split(train_dir, labels):
+    data_augmentation = tf.keras.Sequential([
+        tf.keras.layers.experimental.preprocessing.RandomFlip("horizontal_and_vertical"),
+        tf.keras.layers.experimental.preprocessing.RandomRotation(0.5),
+        tf.keras.layers.experimental.preprocessing.RandomContrast(0.5)
+    ])
+
     dataset = []
     count = 0
     for label in labels:
@@ -14,6 +21,9 @@ def input_target_split(train_dir, labels):
             img = img_to_array(img)
             img = img / 255.0
             dataset.append((img, count))
+            for j in range(1, 3):
+                aug_img = data_augmentation(img)
+                dataset.append((aug_img.numpy(), count))
         print(f'\rCompleted: {label}')
         count += 1
     random.shuffle(dataset)

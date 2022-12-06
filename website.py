@@ -15,6 +15,7 @@ evaluation = evaluation.columns.tolist()
 test_acc = round(float(evaluation[1]), 4) * 100
 test_lost = round(float(evaluation[0]), 4) * 100
 
+st.title('Rock, Paper, Scissors hand classifier')
 col1, col2 = st.columns((1, 1), gap="medium")
 
 with col1:

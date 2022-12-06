@@ -2,10 +2,10 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
-from keras.models import Sequential, Model
+from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import ELU, PReLU, LeakyReLU, ReLU
+from keras.layers import ReLU
 from fileread import input_target_split
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -13,8 +13,10 @@ from sklearn.metrics import classification_report
 
 labels = ['paper', 'scissors', 'rock']
 X, y = input_target_split('images', labels)
+print('Full dataset shapes: ', X.shape, y.shape)
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.22, random_state=42)
-print('check shapes: ', X_train.shape, y_train.shape, X_test.shape, y_test.shape)
+print('train/test shapes: ', X_train.shape, y_train.shape, X_test.shape, y_test.shape)
 
 train_lab_categorical = tf.keras.utils.to_categorical(y_train, num_classes=3, dtype='uint8')
 test_lab_categorical = tf.keras.utils.to_categorical(y_test, num_classes=3, dtype='uint8')
@@ -23,34 +25,23 @@ train_im, valid_im, train_lab, valid_lab = train_test_split(X_train, train_lab_c
                                                             stratify=train_lab_categorical,
                                                             random_state=40, shuffle=True)
 
-# model = Sequential()
-# model.add(Conv2D(32, (3, 3), input_shape=(150, 150, 3), activation='relu'))
-# model.add(MaxPooling2D(2, 2))
-# model.add(Conv2D(32, (3, 3), activation='relu'))
-# model.add(MaxPooling2D(2, 2))
-# model.add(Flatten())
-# model.add(Dense(units=128, activation='relu'))
-# model.add(Dense(units=3, activation='softmax'))
-
+print('train/valid shapes: ', train_im.shape, train_lab.shape, valid_im.shape, valid_lab.shape)
+print()
 model = Sequential()
 model.add(Conv2D(16, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(150,150,3)))
-#model.add(LeakyReLU(alpha=0.1))
 model.add(ReLU())
 model.add(MaxPooling2D((2, 2),padding='same'))
 model.add(Dropout(0.25))
 model.add(Conv2D(32, (3, 3), activation='linear',padding='same'))
-#model.add(LeakyReLU(alpha=0.1))
 model.add(ReLU())
 model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
 model.add(Dropout(0.25))
 model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
-#model.add(LeakyReLU(alpha=0.1))
 model.add(ReLU())
 model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
 model.add(Dropout(0.4))
 model.add(Flatten())
 model.add(Dense(64, activation='linear'))
-#model.add(LeakyReLU(alpha=0.1))
 model.add(ReLU())
 model.add(Dropout(0.3))
 model.add(Dense(3, activation='softmax'))
@@ -64,7 +55,6 @@ test_eval = model.evaluate(X_test, test_lab_categorical, verbose=1)
 
 print('Test loss:', test_eval[0])
 print('Test accuracy:', test_eval[1])
-
 
 accuracy = train_dropout.history['accuracy']
 val_accuracy = train_dropout.history['val_accuracy']
