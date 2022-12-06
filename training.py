@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import ELU, PReLU, LeakyReLU
+from keras.layers import ELU, PReLU, LeakyReLU, ReLU
 from fileread import input_target_split
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -33,21 +33,25 @@ train_im, valid_im, train_lab, valid_lab = train_test_split(X_train, train_lab_c
 # model.add(Dense(units=3, activation='softmax'))
 
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(150,150,3)))
-model.add(LeakyReLU(alpha=0.1))
+model.add(Conv2D(16, kernel_size=(3, 3),activation='linear',padding='same',input_shape=(150,150,3)))
+#model.add(LeakyReLU(alpha=0.1))
+model.add(ReLU())
 model.add(MaxPooling2D((2, 2),padding='same'))
 model.add(Dropout(0.25))
-model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
-model.add(LeakyReLU(alpha=0.1))
+model.add(Conv2D(32, (3, 3), activation='linear',padding='same'))
+#model.add(LeakyReLU(alpha=0.1))
+model.add(ReLU())
 model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
 model.add(Dropout(0.25))
-model.add(Conv2D(128, (3, 3), activation='linear',padding='same'))
-model.add(LeakyReLU(alpha=0.1))
+model.add(Conv2D(64, (3, 3), activation='linear',padding='same'))
+#model.add(LeakyReLU(alpha=0.1))
+model.add(ReLU())
 model.add(MaxPooling2D(pool_size=(2, 2),padding='same'))
 model.add(Dropout(0.4))
 model.add(Flatten())
-model.add(Dense(128, activation='linear'))
-model.add(LeakyReLU(alpha=0.1))
+model.add(Dense(64, activation='linear'))
+#model.add(LeakyReLU(alpha=0.1))
+model.add(ReLU())
 model.add(Dropout(0.3))
 model.add(Dense(3, activation='softmax'))
 
