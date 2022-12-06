@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import pandas as pd
-import tensorflow as tf
+import tensorflow.lite as tflite
 import streamlit as st
 from PIL import Image
 labels = ['paper', 'scissors', 'rock']
@@ -42,7 +42,7 @@ if img_file_buffer is not None:
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-
+    tf.lite.
     # Preprocess the image to required size and cast
     input_shape = input_details[0]['shape']
     input_tensor = np.array(np.expand_dims(img, 0))
