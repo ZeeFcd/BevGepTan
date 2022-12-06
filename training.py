@@ -49,7 +49,7 @@ model.add(Dense(3, activation='softmax'))
 model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
 model.summary()
 
-train_dropout = model.fit(train_im, train_lab, batch_size=32, epochs=10, verbose=1, validation_data=(valid_im, valid_lab))
+train_dropout = model.fit(train_im, train_lab, batch_size=64, epochs=20, verbose=1, validation_data=(valid_im, valid_lab))
 
 test_eval = model.evaluate(X_test, test_lab_categorical, verbose=1)
 
