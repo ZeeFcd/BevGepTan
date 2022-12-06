@@ -38,11 +38,11 @@ if img_file_buffer is not None:
     img = img / 255.0
     st.image(img)
 
-    interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
+    interpreter = tflite.Interpreter(model_path='model.tflite') #allocate the tensors
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-    tf.lite.
+
     # Preprocess the image to required size and cast
     input_shape = input_details[0]['shape']
     input_tensor = np.array(np.expand_dims(img, 0))
