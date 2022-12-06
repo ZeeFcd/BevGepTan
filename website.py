@@ -33,24 +33,42 @@ with col2:
 
 st.table(data=report)
 
-img = st.button("Take picture of your hand", on_click=take_picture)
+img_file_buffer = st.camera_input("Take a picture of your hand")
 
-interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
-interpreter.allocate_tensors()
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
+if img_file_buffer is not None:
+    # To read image file buffer with OpenCV:
+    bytes_data = img_file_buffer.getvalue()
+    img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
 
-# Preprocess the image to required size and cast
-input_shape = input_details[0]['shape']
-input_tensor = np.array(np.expand_dims(img, 0))
-input_index = interpreter.get_input_details()[0]["index"]
-interpreter.set_tensor(input_index, input_tensor)
-interpreter.invoke()
-output_details = interpreter.get_output_details()
+    st.image(img)
+    img = cv2.resize(img, (150, 150))
+    img = img / 255.0
+    st.image(img)
 
-output_data = interpreter.get_tensor(output_details[0]['index'])
-pred = np.squeeze(output_data)
-highest_pred_loc = np.argmax(pred)
-label_name = labels[highest_pred_loc]
+    # Check the type of cv2_img:
+    # Should output: <class 'numpy.ndarray'>
+    st.write(type(img))
 
-st.write(label_name)
+    # Check the shape of cv2_img:
+    # Should output shape: (height, width, channels)
+    st.write(img.shape)
+
+    # interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
+    # interpreter.allocate_tensors()
+    # input_details = interpreter.get_input_details()
+    # output_details = interpreter.get_output_details()
+    #
+    # # Preprocess the image to required size and cast
+    # input_shape = input_details[0]['shape']
+    # input_tensor = np.array(np.expand_dims(img, 0))
+    # input_index = interpreter.get_input_details()[0]["index"]
+    # interpreter.set_tensor(input_index, input_tensor)
+    # interpreter.invoke()
+    # output_details = interpreter.get_output_details()
+    #
+    # output_data = interpreter.get_tensor(output_details[0]['index'])
+    # pred = np.squeeze(output_data)
+    # highest_pred_loc = np.argmax(pred)
+    # label_name = labels[highest_pred_loc]
+    #
+    # st.write(label_name)
