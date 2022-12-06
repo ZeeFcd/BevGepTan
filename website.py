@@ -4,6 +4,13 @@ import pandas as pd
 import tensorflow as tf
 import streamlit as st
 from PIL import Image
+
+
+def take_picture():
+    pic = st.camera_input("Take a picture of your hand")
+    pic = cv2.resize(pic, (150, 150))
+    pic = pic / 255.0
+
 labels = ['paper', 'scissors', 'rock']
 
 acc = Image.open("correctness.png")
@@ -25,9 +32,8 @@ with col2:
     st.metric('Test loss', f'{test_lost}%')
 
 st.table(data=report)
-img = st.camera_input("Take picture of your hand")
-img = cv2.resize(img, (150, 150))
-img = img / 255.0
+
+img = st.button("Take picture of your hand", on_click=take_picture)
 
 interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
 interpreter.allocate_tensors()
