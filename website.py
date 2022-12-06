@@ -36,22 +36,22 @@ st.table(data=report)
 img_file_buffer = st.camera_input("Take a picture of your hand")
 
 if img_file_buffer is not None:
-    # To read image file buffer with OpenCV:
-    bytes_data = img_file_buffer.getvalue()
-    img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
+    # To read image file buffer as a PIL Image:
+    pic = Image.open(img_file_buffer)
+
+    # To convert PIL Image to numpy array:
+    img = np.array(pic)
 
     st.image(img)
-    img = cv2.resize(img, (150, 150))
+    img = img.resize((150, 150))
     img = img / 255.0
     st.image(img)
 
-    # Check the type of cv2_img:
+    st.write(img.shape)
+
+    # Check the type of img_array:
     # Should output: <class 'numpy.ndarray'>
     st.write(type(img))
-
-    # Check the shape of cv2_img:
-    # Should output shape: (height, width, channels)
-    st.write(img.shape)
 
     # interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
     # interpreter.allocate_tensors()
