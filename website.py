@@ -4,13 +4,6 @@ import pandas as pd
 import tensorflow as tf
 import streamlit as st
 from PIL import Image
-
-
-def take_picture():
-    pic = st.camera_input("Take a picture of your hand")
-    pic = cv2.resize(pic, (150, 150))
-    pic = pic / 255.0
-
 labels = ['paper', 'scissors', 'rock']
 
 acc = Image.open("correctness.png")
@@ -41,35 +34,26 @@ if img_file_buffer is not None:
     img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    st.image(img)
     img = cv2.resize(img, (150, 150))
     img = img / 255.0
     st.image(img)
 
-    # Check the type of cv2_img:
-    # Should output: <class 'numpy.ndarray'>
-    st.write(type(img))
+    interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
 
-    # Check the shape of cv2_img:
-    # Should output shape: (height, width, channels)
-    st.write(img.shape)
+    # Preprocess the image to required size and cast
+    input_shape = input_details[0]['shape']
+    input_tensor = np.array(np.expand_dims(img, 0))
+    input_index = interpreter.get_input_details()[0]["index"]
+    interpreter.set_tensor(input_index, input_tensor)
+    interpreter.invoke()
+    output_details = interpreter.get_output_details()
 
-    # interpreter = tf.tflite.Interpreter(model_path='model.tflite') #allocate the tensors
-    # interpreter.allocate_tensors()
-    # input_details = interpreter.get_input_details()
-    # output_details = interpreter.get_output_details()
-    #
-    # # Preprocess the image to required size and cast
-    # input_shape = input_details[0]['shape']
-    # input_tensor = np.array(np.expand_dims(img, 0))
-    # input_index = interpreter.get_input_details()[0]["index"]
-    # interpreter.set_tensor(input_index, input_tensor)
-    # interpreter.invoke()
-    # output_details = interpreter.get_output_details()
-    #
-    # output_data = interpreter.get_tensor(output_details[0]['index'])
-    # pred = np.squeeze(output_data)
-    # highest_pred_loc = np.argmax(pred)
-    # label_name = labels[highest_pred_loc]
-    #
-    # st.write(label_name)
+    output_data = interpreter.get_tensor(output_details[0]['index'])
+    pred = np.squeeze(output_data)
+    highest_pred_loc = np.argmax(pred)
+    label_name = labels[highest_pred_loc]
+
+    st.write(label_name)
