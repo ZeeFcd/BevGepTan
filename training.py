@@ -84,6 +84,15 @@ print(test_eval)
 with open('eval.csv', 'w') as f:
     f.write(f"{test_eval[0]},{test_eval[1]}")
 
+# Convert the model.
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+# Save the model.
+with open('model.tflite', 'wb') as f:
+  f.write(tflite_model)
+
+
 
 
 
